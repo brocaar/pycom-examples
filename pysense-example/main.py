@@ -12,8 +12,6 @@ from LTR329ALS01 import LTR329ALS01
 from MPL3115A2 import MPL3115A2, ALTITUDE, PRESSURE
 
 py = Pysense()
-mpPress = MPL3115A2(py,mode=PRESSURE)
-mpAlt = MPL3115A2(py,mode=ALTITUDE)
 si = SI7006A20(py)
 lt = LTR329ALS01(py)
 li = LIS2HH12(py)
@@ -76,11 +74,14 @@ while True:
     lpp.add_relative_humidity(1, si.humidity())
     lpp.add_temperature(1, si.temperature())
 
+    mpPress = MPL3115A2(py,mode=PRESSURE)
     print('\n\n** Barometric Pressure Sensor with Altimeter (MPL3115A2)')
     print('Pressure (hPa)', mpPress.pressure()/100)
+    lpp.add_barometric_pressure(1, mpPress.pressure()/100)
+
+    mpAlt = MPL3115A2(py,mode=ALTITUDE)
     print('Altitude', mpAlt.altitude())
     print('Temperature', mpAlt.temperature())
-    lpp.add_barometric_pressure(1, mpPress.pressure()/100)
     lpp.add_gps(1, 0, 0, mpAlt.altitude())
     lpp.add_temperature(2, mpAlt.temperature())
 
